@@ -1,0 +1,143 @@
+SELECT COUNT(city)
+FROM city;
+--------------------------------------------------------------------------------------------------
+SELECT COUNT(DISTINCT city)
+FROM city;
+--------------------------------------------------------------------------------------------------
+SELECT COUNT(DISTINCT first_name)
+FROM actor;
+--------------------------------------------------------------------------------------------------
+SELECT * 
+FROM payment;
+--------------------------------------------------------------------------------------------------
+SELECT COUNT(*)
+FROM payment;
+--------------------------------------------------------------------------------------------------
+SELECT COUNT(DISTINCT amount)
+FROM payment;
+--------------------------------------------------------------------------------------------------
+SELECT * 
+FROM customer
+LIMIT 5;
+--------------------------------------------------------------------------------------------------
+SELECT customer_id,amount
+FROM payment
+ORDER BY amount DESC
+LIMIT 15;
+--------------------------------------------------------------------------------------------------
+SELECT customer_id,amount
+FROM payment
+WHERE amount BETWEEN 0 and 7; --BETWEEN is used for specifying that a value should be between a range of numbers
+--low to high--
+--------------------------------------------------------------------------------------------------
+SELECT min(rental_duration)
+FROM film;
+SELECT max (rental_duration)
+FROM film;
+SELECT title,description,rental_duration,replacement_cost
+FROM film
+WHERE rental_duration BETWEEN 3 and 5
+ORDER BY rental_duration,title;
+--------------------------------------------------------------------------------------------------
+SELECT country_id,country
+FROM country
+WHERE country_id IN(1,5,7,9,54,76,100);
+--the IN operator allows you to do multilpe criteria for the WHERE function. it is a shorhand for OR condition--
+--------------------------------------------------------------------------------------------------
+SELECT title,description
+FROM film
+WHERE description LIKE '%who%'-- % is a wildcard, when used as seen in this line of code, sql looks for values that
+--have the desire criteria in any position--
+ORDER BY title;
+--------------------------------------------------------------------------------------------------
+SELECT title,description
+FROM film
+WHERE description LIKE 'A%'-- % is a wildcard, when used as seen in this line of code, sql looks for values that
+--begin with the desire criteria--
+ORDER BY title;
+--------------------------------------------------------------------------------------------------
+SELECT title,description
+FROM film
+WHERE description LIKE '%t'-- % is a wildcard, when used as seen in this line of code, sql looks for values that
+--end with the desire criteria--
+ORDER BY title;
+--------------------------------------------------------------------------------------------------
+--How many payment transactions were greater than $5.00?--
+SELECT COUNT(amount)
+FROM payment
+WHERE amount>5;
+--------------------------------------------------------------------------------------------------
+--How many unique districts are our customers from?--
+SELECT COUNT (DISTINCT district)
+FROM address;
+--------------------------------------------------------------------------------------------------
+--Retrieve the list of names from those distinct districts--
+SELECT DISTINCT district
+FROM address
+ORDER BY district;
+--------------------------------------------------------------------------------------------------
+--How many films have the word Truman somewhere in the title?--
+SELECT COUNT(title)
+FROM film
+WHERE title LIKE '%Truman%';
+--------------------------------------------------------------------------------------------------
+SELECT MIN (rental_rate) AS Lowest_Rental_Rent-- AS lets you rename the function as whatever you wish--
+FROM film;
+--------------------------------------------------------------------------------------------------
+SELECT MAX(rental_rate) AS Highest_Rental_Rent
+FROM film;
+--------------------------------------------------------------------------------------------------
+SELECT AVG(rental_rate) AS Average_Rental_Rate
+FROM film;
+--------------------------------------------------------------------------------------------------
+SELECT ROUND(AVG(rental_rate),2) AS Average_Rental_Rate-- ROUND is used to round number to however many decimal places
+FROM film;--desired--
+--------------------------------------------------------------------------------------------------
+SELECT SUM(rental_rate) AS Sum_Of_ALL_Rental_Rate
+FROM film;
+--------------------------------------------------------------------------------------------------
+CREATE TABLE a_a(
+patient_id serial primary key, --serial indicates the computer to automatically generate a unique ID for each row--
+date_of_birth date);
+
+INSERT INTO a_a(date_of_birth) --INSERT INTO is for putting info into the columns of a table--
+Values ('2000/01/02'),('2020/05/15'), --VALUES is specify what you want that info to be (follow the same format
+('2022/08/02'),('2021/07/20'),--for when adding mutiple rows to the same column)--
+('2005/10/07'),('2010/11/16'),
+('2019/05/10'),('2015/08/10'),
+('2002/01/02'),('2008/03/15');
+
+SELECT  AGE(date_of_birth) --Age() allows you to get the age from date of birth. returns years,months,days,
+FROM a_a;--and timestamp--
+
+SELECT date_part('year', age(date_of_birth)) --this allows you to specify what you want to see, just years
+FROM a_a;--or just the months,etc.--
+
+SELECT patient_id,date_of_birth
+FROM a_a
+WHERE date_part('year', age(date_of_birth))>='0' and date_part('year', age(date_of_birth))<='2';
+--------------------------------------------------------------------------------------------------
+SELECT staff_id,COUNT(payment_id),SUM(amount)
+FROM payment
+GROUP BY staff_id;--GROUP BY is used for grouping things by categories--
+--------------------------------------------------------------------------------------------------
+SELECT customer_id,sum(amount)
+FROM payment
+GROUP BY customer_id
+ORDER BY SUM(amount) asc
+LIMIT (5);
+--------------------------------------------------------------------------------------------------
+SELECT customer_id,SUM(amount)
+FROM payment
+GROUP BY customer_id
+HAVING SUM(amount)>200;--HAVING is used with GROUP BY and its used instead of WHERE 
+--because where can not be used with aggregate functions--
+--------------------------------------------------------------------------------------------------
+SELECT customer_id, COUNT(payment_id) AS number_of_transactions
+FROM payment
+GROUP BY customer_id
+HAVING COUNT(payment_id)>=35
+ORDER BY COUNT(payment_id) desc;
+
+
+
