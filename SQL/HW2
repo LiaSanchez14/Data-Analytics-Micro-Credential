@@ -1,0 +1,21 @@
+--Join the film to the film_actor table.--
+
+SELECT *
+FROM film
+INNER JOIN film_actor
+ON film.film_id=film_actor.film_id;
+
+--Join the actor table to the film_actor table.--
+
+SELECT *
+FROM actor
+INNER JOIN film_actor
+ON actor.actor_id=film_actor.actor_id;
+
+--Try to join the actor, film_actor, and film table together (3 joins!)--
+SELECT *
+FROM actor
+INNER JOIN film_actor
+ON actor.last_update=film_actor.last_update
+INNER JOIN film
+ON film_actor.last_update=film.last_update;
