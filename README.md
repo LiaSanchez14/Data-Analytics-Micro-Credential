@@ -1,2 +1,2 @@
 # Data-Analytics-Micro-Credential
-A collection of assignments and projects I worked on during this certification.
+A collection of Python and SQL assignments and projects I worked on during this certification.
