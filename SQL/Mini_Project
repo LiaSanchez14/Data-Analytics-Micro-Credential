@@ -1,0 +1,152 @@
+--create a table, then upload the data--
+
+DROP TABLE IF EXISTS student;
+CREATE TABLE student
+(
+    id serial PRIMARY KEY,
+    first_name character varying,
+    last_name character varying,
+    email character varying,
+    gender character varying,
+    work_phone character varying,
+    book_preference_hardcopy boolean
+);
+
+SELECT *
+FROM student
+
+--After I created the tables, I imported the csv for both tables using the import/export option--
+
+DROP TABLE IF EXISTS student_marks;
+CREATE TABLE student_marks
+(
+    id serial PRIMARY KEY,
+    student_reg_id integer,
+    student_id integer,
+	unit2 integer,
+	unit3 integer,
+	unit4 integer,
+	unit5 integer    
+);
+
+SELECT * 
+FROM student_marks
+-----------------------------------------------------------------------------------------------------------
+--find the students with the highest marks in Unit 4--
+
+SELECT max(unit4)
+FROM student_marks;
+
+SELECT student.first_name,student.last_name,student_marks.unit4
+FROM student
+INNER JOIN student_marks
+ON student.id=student_marks.student_id
+WHERE student_marks.unit4='100'
+ORDER BY student.first_name;
+
+--Find students scored between 89 and 100 unit4--
+
+SELECT student.first_name,student.last_name,student_marks.unit4
+FROM student
+INNER JOIN student_marks
+ON student.id=student_marks.student_id
+WHERE student_marks.unit4 BETWEEN 89 and 100
+ORDER BY student.first_name;
+
+--------------------------------------------------------------------------------------------------------------------
+--Take a closer look at the tables that you created and come up with 10 different scenarios/questions and form SQL--
+--------------------------------------------------------------------------------------------------------------------
+--How many students are there?--
+
+SELECT COUNT(id) AS number_of_students
+FROM student;
+
+--find the email for the students with the lowest scores on unit 3--
+
+SELECT student.email,student_marks.unit3
+FROM student
+INNER JOIN student_marks
+ON student.id=student_marks.student_id
+WHERE student_marks.unit3= '90'
+ORDER BY student.email;
+
+--what are the registration id for all of the names that begin with the letter "A"--
+
+SELECT student.first_name,student.last_name,student_marks.student_reg_id
+FROM student
+INNER JOIN student_marks
+ON student.id=student_marks.student_id
+WHERE student.first_name LIKE 'A%'
+ORDER BY student.first_name;
+
+--what is the average score for unit 5?--
+
+SELECT ROUND(AVG(unit5),0) AS average_score
+FROM student_marks;
+
+--find the names, email and phone number of all students that score below average for unit 2--
+
+SELECT ROUND(AVG(unit2),0) AS average_score
+FROM student_marks;
+
+SELECT student.first_name,student.last_name,student.email,student_marks.unit2
+FROM student
+INNER JOIN student_marks
+ON student.id=student_marks.student_id
+WHERE student_marks.unit2<'93'
+ORDER BY student.first_name;
+
+--find all the names of students who scored 100 on unit 4 and whos phone number ends in the number '5'--
+
+SELECT student.first_name,student.last_name,student.work_phone,student_marks.unit4
+FROM student
+INNER JOIN student_marks
+ON student.id=student_marks.student_id
+WHERE student_marks.unit4='100' and student.work_phone LIKE '%5'
+ORDER BY student.first_name;
+
+--find the emails of all students who prefered a hardcopy book--
+
+SELECT email
+FROM student
+WHERE book_preference_hardcopy='True'
+ORDER BY email;
+
+--match all students to their registration ID--
+
+SELECT student.first_name,student.last_name,student_marks.student_reg_id
+FROM student
+INNER JOIN student_marks
+ON student.id=student_marks.student_id
+ORDER BY student.first_name;
+
+--find the names of all students who scored above average for unit 3--
+
+SELECT ROUND(AVG(unit3),0) AS average_score
+FROM student_marks;
+
+SELECT student.first_name,student.last_name,student_marks.unit2
+FROM student
+INNER JOIN student_marks
+ON student.id=student_marks.student_id
+WHERE student_marks.unit2>'95'
+ORDER BY student.first_name;
+
+--find the scores for all units for Halette Joynt--
+
+SELECT student.first_name,student.last_name,student_marks.unit2,student_marks.unit3,student_marks.unit4,
+student_marks.unit5
+FROM student
+INNER JOIN student_marks
+ON student.id=student_marks.student_id
+WHERE student.first_name='Halette' and student.last_name='Joynt';
+
+--in what unit did Cass Tremain have the lowest score?--
+
+SELECT student.first_name,student.last_name,student_marks.unit2,student_marks.unit3,student_marks.unit4,
+student_marks.unit5
+FROM student
+INNER JOIN student_marks
+ON student.id=student_marks.student_id
+WHERE student.first_name='Cass' and student.last_name='Tremain';
+--unit 4--
